@@ -13,8 +13,8 @@ app.use(cookieParser());
 /*
  * Routes
  */
-app.use('/glance', require('./routes/glance'));
-app.use('/addTherapy', require('./routes/addTherapy'));
+app.use('/patients', require('./routes/patients'));
+app.use('/therapies', require('./routes/therapies'));
 
 // catch 404
 app.use((req, res, next) => {
