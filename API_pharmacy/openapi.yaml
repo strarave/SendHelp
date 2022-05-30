@@ -1,0 +1,90 @@
+openapi: 3.0.0
+info:
+  title: Unified API for accessing pharmacies data
+  description: Through this interface it is possible to retrieve generic information about pharmacies (as service times, services available, addresses...) and, provided the doctorId, also order drugs and specify treatments for specific patients.
+  version: '1.0'
+   
+servers:
+  - url: http://www.unipharma.com/api
+    description: Main server, base URL for API call
+
+paths:
+  /glance/{pharmacyId}:
+    get:
+      summary: Basic information about the pharmacy
+      parameters:
+        - in: pharmacyId
+          name: pharmacyId
+          schema:
+            type: string
+            example: Farmacia san Savino
+          required: true
+          description: Pharmacy name
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  address:
+                    type: string
+                  timetable:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        day:
+                          type: string
+                        hours:
+                          type: string
+              example:
+                address: Via Morini, 42
+                timetable:
+                  - day: lun ven
+                    hours: 9 12, 14 18
+                  - day: sab dom
+                    hours: 10 14
+        '404':
+          description: "pharmacyId not present in pharmacies DB"
+  /addTherapy:
+    post:
+      summary: Add or remove a drug / set of drugs to a patient record
+      responses:
+        '201':
+          description: Therapy modified
+        '403':
+          description: Unauthorized; the ID of the doctor provided is either not abilitated or non existing
+        '400':
+          description: Bad request; either the patient FC is wrong or the name of the drug is misspelled
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                type: object
+                properties:
+                  doctorId:
+                    type: string
+                  userFiscalCode:
+                    type: string
+                  drugName:
+                    type: string
+                  action:
+                    type: enum
+                      - 'add'
+                      - 'remove'
+                      - 'changeDosage'
+                  dosagePrescribed:
+                    type: string
+                  additionalNotes:
+                    type: string
+            example:
+              - doctorId: 123456789
+                userFiscalCode: CHRTT99D100G388L
+                drugName: Rupafin
+                action: 'add'
+                dosagePrescribed: 15 ml per day
+                additionalNotes: take far from meals

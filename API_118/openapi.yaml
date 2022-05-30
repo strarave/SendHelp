@@ -1,0 +1,91 @@
+openapi: 3.0.0
+info:
+  title: Emergency service API for Italy
+  description: This API offers endpoint to call ambulances and dispatch emergency signals to the italian healthcare system
+  version: '1.0'
+   
+servers:
+  - url: http://www.118-emergency.it
+    description: Main server, base URL for API call
+
+paths:
+  /getServiceStatus:
+    get:
+      summary: Check if the service is active.
+      responses:
+        '200':
+          description: The service is online
+        '500':
+          description: The service is offline
+  /getAmbulances/{locationId}:
+    get:
+      summary: Fetch the number of ambulances in a specific location.
+      parameters:
+        - in: locationId
+          name: locationId
+          schema:
+            type: string
+            example: Guardia medica continuita assistenziale zona 1
+          required: true
+          description: The location is provided as the competence zone of a certain healtcare unit
+      responses:
+        '200':
+          description: The number of ambulance available in that location
+          content:
+            application/json:
+              schema:
+                type: integer
+                example: 4
+  /callAmbulance:
+    post:
+      summary: Submit a request for an ambulance
+      description: Request and ambulance, given the address, the patient conditions (so the symptoms and type of emergency) and generalities and the doctor ID, which can also represnt the emergency issuing agent. The doctor can also specify additional notes, for example related to first aid actions.
+      responses:
+        '201':
+          description: Call sent to ambulance operators
+        '403':
+          description: Unauthorized; the ID of the doctor provided is either not abilitated or non existing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                doctorId:
+                  type: string
+                patientData:
+                  type: object
+                  properties:
+                    patientName:
+                      type: string
+                    patientSurname:
+                      type: string
+                    patientAddress:
+                      type: string
+                emergencyDetails:
+                  type: object
+                  properties:
+                    emergencyLevel:
+                      enum:
+                        - 'severe'
+                        - 'very severe'
+                        - 'death risk'
+                    reportedSymptoms:
+                      type: array
+                      items:
+                        type: string
+                    suggestedFirstAid:
+                      type: string
+            example:
+              doctorId: 123456789
+              patientData:
+                patientName: Mario
+                patientSurname: Rossi
+                patientAddress: via Verdi, 59
+              emergencyDetails:
+                emergencyLevel: 'death risk'
+                reportedSymptoms:
+                  - 'Heavy breathing'
+                  - 'No eyesight'
+                suggestedFirstAid: Two millilitres of morphine
