@@ -14,7 +14,7 @@ isRegistered = (patient) => {
 module.exports.getPatient = async (patient) => {
   if (!isRegistered(patient))
     return {
-      status: 400,
+      status: 404,
       data: `Patient '${patient}' not found`
     };
 
@@ -86,7 +86,7 @@ module.exports.addTherapy = async (body) => {
 
   if (!isRegistered(patient))
     return {
-      status: 403,
+      status: 400,
       data: `Patient '${patient}' is not registered`
     }
 
@@ -110,7 +110,7 @@ module.exports.updateTherapy = async (therapyId, body) => {
   let index = therapies.findIndex((therapy) => therapy.id == therapyId);
   if (index == -1)
     return {
-      status: 403,
+      status: 404,
       data: `Therapy ${therapyId} not found`
     };
 
@@ -128,7 +128,7 @@ module.exports.deleteTherapy = async (therapyId) => {
   let index = therapies.findIndex((therapy) => therapy.id == therapyId);
   if (index == -1)
     return {
-      status: 400,
+      status: 404,
       data: `Therapy ${therapyId} not found`
     };
 

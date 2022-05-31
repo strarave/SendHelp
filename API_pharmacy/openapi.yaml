@@ -3,62 +3,130 @@ info:
   title: Unified API for accessing pharmacies data
   description: Through this interface it is possible to retrieve generic information about pharmacies (as service times, services available, addresses...) and, provided the doctorId, also order drugs and specify treatments for specific patients.
   version: '1.0'
-   
+
 servers:
   - url: http://www.unipharma.com/api
     description: Main server, base URL for API call
 
 paths:
-  /glance/{pharmacyId}:
+  /patients/{patient}:
     get:
-      summary: Basic information about the pharmacy
+      summary: Check if the patient is registered in the pharmacies DB
       parameters:
-        - in: pharmacyId
-          name: pharmacyId
+        - in: patient
+          name: patient
           schema:
             type: string
-            example: Farmacia san Savino
+            example: Giovanna
           required: true
-          description: Pharmacy name
+          description: Patient nickname
       responses:
-        '200':
+        '404':
+          description: Patient not present in pharmacies DB
           content:
             application/json:
               schema:
-                type: object
-                properties:
-                  address:
-                    type: string
-                  timetable:
-                    type: array
-                    items:
-                      type: object
-                      properties:
-                        day:
-                          type: string
-                        hours:
-                          type: string
-              example:
-                address: Via Morini, 42
-                timetable:
-                  - day: lun ven
-                    hours: 9 12, 14 18
-                  - day: sab dom
-                    hours: 10 14
-        '404':
-          description: "pharmacyId not present in pharmacies DB"
-  /addTherapy:
+                type: string
+                example: Patient Giovanna is not found
+        '200':
+          description: Patient is registered in pharmacies DB
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Patient Giovanna is registered
+
+  /patients:
     post:
-      summary: Add or remove a drug / set of drugs to a patient record
-      responses:
-        '201':
-          description: Therapy modified
-        '403':
-          description: Unauthorized; the ID of the doctor provided is either not abilitated or non existing
-        '400':
-          description: Bad request; either the patient FC is wrong or the name of the drug is misspelled
+      summary: Add a patient in the pharmacies DB
       requestBody:
         required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                nickname:
+                  type: string
+              example:
+                nickname: Giorgia
+      responses:
+        '400':
+          description: Patient already registered in pharmacies DB
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Patient 'Giovanna' already registered
+        '200':
+          description: Patient successfully registered in pharmacies DB
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Patient 'Giovanna' successfully registered
+
+  /therapies:
+    get:
+      summary: Get all therapies registered in the pharmacies DB
+      responses:
+        '200':
+          description: List of registered therapies in the pharmacies DB
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  type: object
+                  properties:
+                    id:
+                      type: integer
+                    oncologist:
+                      type: string
+                    patient:
+                      type: string
+                    drug:
+                      type: string
+                    dosage:
+                      type: string
+                    comment:
+                      type: string
+                  example:
+                    id: 1
+                    oncologist: Gianni
+                    patient: Veronica
+                    drug: Tamoxifene
+                    dosage: 2 mg
+                    comment: null
+    post:
+      summary: Register a therapy in the pharmacies DB
+      responses:
+        '400':
+          description: Therapy patient not registered in the pharmacies DB
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Patient 'Giovanna' is not registered
+        '201':
+          description: Therapy seccessfully registered in the pharmacies DB
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Therapy 5 successfully created
+
+  /therapies/{therapyId}:
+    post:
+      summary: Update a registered therapy in the pharmacy DB
+      parameters:
+        - in: therapyId
+          name: therapyId
+          schema:
+            type: integer
+          required: true
+          description: Therapy ID
+      requestBody:
         content:
           application/json:
             schema:
@@ -66,25 +134,59 @@ paths:
               items:
                 type: object
                 properties:
-                  doctorId:
+                  oncologist:
                     type: string
-                  userFiscalCode:
+                  patient:
                     type: string
-                  drugName:
+                  drug:
                     type: string
-                  action:
-                    type: enum
-                      - 'add'
-                      - 'remove'
-                      - 'changeDosage'
-                  dosagePrescribed:
+                  dosage:
                     type: string
-                  additionalNotes:
+                  comment:
                     type: string
-            example:
-              - doctorId: 123456789
-                userFiscalCode: CHRTT99D100G388L
-                drugName: Rupafin
-                action: 'add'
-                dosagePrescribed: 15 ml per day
-                additionalNotes: take far from meals
+                example:
+                  oncologist: Gianni
+                  patient: Veronica
+                  drug: Tamoxifene
+                  dosage: 2 mg
+                  comment: null
+      responses:
+        '404':
+          description: Therapy not registered in pharmacies DB
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Therapy 2 not found
+        '200':
+          description: Therapy successfully updated in pharmacies DB
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Therapy 2 successfully updated
+
+    delete:
+      summary: Delete a registered therapy in the pharmacy DB
+      parameters:
+        - in: therapyId
+          name: therapyId
+          schema:
+            type: integer
+          required: true
+          description: Therapy ID
+      responses:
+        '404':
+          description: Therapy not registered in pharmacies DB
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Therapy 2 not found
+        '200':
+          description: Therapy successfully deleted in pharmacies DB
+          content:
+            application/json:
+              schema:
+                type: string
+                example: Therapy 2 successfully deleted
