@@ -1,5 +1,5 @@
 const express = require('express');
-const getServiceStatus = require('../services/getServiceStatus');
+const serviceStatus = require('../services/serviceStatus');
 
 const router = new express.Router();
 
@@ -12,7 +12,7 @@ router.get('/', async (req, res, next) => {
   };
 
   try {
-    const result = await getServiceStatus.getGetServiceStatus(options);
+    const result = await serviceStatus.serviceStatus(options);
     res.send(result.data);
   } catch (err) {
     next(err);

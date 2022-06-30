@@ -9,7 +9,7 @@ servers:
     description: Main server, base URL for API call
 
 paths:
-  /getServiceStatus:
+  /serviceStatus:
     get:
       summary: Check if the service is active.
       responses:
@@ -17,7 +17,7 @@ paths:
           description: The service is online
         '500':
           description: The service is offline
-  /getAmbulances/{locationId}:
+  /ambulances/{locationId}:
     get:
       summary: Fetch the number of ambulances in a specific location.
       parameters:
