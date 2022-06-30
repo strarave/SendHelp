@@ -14,7 +14,7 @@
             document.getElementById("multiselectdd").addEventListener("change", function () {
                 // Begin Swagger UI call region
                 const ui = SwaggerUIBundle({
-                    url: "API_" + document.getElementById("multiselectdd").nodeValue + "/openapi.yaml", //Location of Open API spec in the repo
+                    url: "API_" + document.getElementById("multiselectdd").options[document.getElementById("multiselectdd").selectedIndex].text + "/openapi.yaml", //Location of Open API spec in the repo
                     dom_id: '#swagger-ui',
                     deepLinking: true,
                     presets: [
