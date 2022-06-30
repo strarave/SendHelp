@@ -11,7 +11,7 @@
             </select>
         <div id="swagger-ui"></div> <!-- Div to hold the UI component -->
         <script>
-            window.onload = function () {
+            document.getElementById("multiselectdd").addEventListener("change", function () {
                 // Begin Swagger UI call region
                 const ui = SwaggerUIBundle({
                     url: "API_" + document.getElementById("multiselectdd").nodeValue + "/openapi.yaml", //Location of Open API spec in the repo
@@ -26,7 +26,7 @@
                     ],
                 })
                 window.ui = ui
-            }
+            });
         </script>
     </body>
 </html>
