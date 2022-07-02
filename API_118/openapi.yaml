@@ -36,7 +36,7 @@ paths:
               schema:
                 type: integer
                 example: 4
-  /callAmbulance:
+  /ambulanceRequest:
     post:
       summary: Submit a request for an ambulance
       description: Request and ambulance, given the address, the patient conditions (so the symptoms and type of emergency) and generalities and the doctor ID, which can also represnt the emergency issuing agent. The doctor can also specify additional notes, for example related to first aid actions.

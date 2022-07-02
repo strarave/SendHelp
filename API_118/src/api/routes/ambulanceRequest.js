@@ -1,5 +1,5 @@
 const express = require('express');
-const callAmbulance = require('../services/callAmbulance');
+const ambulanceRequest = require('../services/ambulanceRequest');
 
 const router = new express.Router();
 
@@ -14,7 +14,7 @@ router.post('/', async (req, res, next) => {
   let params = req.body;
 
   try {
-    const result = await callAmbulance.postCallAmbulance(params);
+    const result = await ambulanceRequest.postambulanceRequest(params);
     res.send(result.data);
   } catch (err) {
     next(err);
