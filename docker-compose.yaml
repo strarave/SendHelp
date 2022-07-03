@@ -14,3 +14,9 @@ services:
     ports:
       - "3000:3000"
     restart: unless-stopped
+
+  camunda:
+    image: camunda/camunda-bpm-platform
+    container_name: camunda
+    ports:
+      - "8080:8080"
