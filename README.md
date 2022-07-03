@@ -8,3 +8,10 @@ This interface mocks the behaviour of an emergency automated system that lets th
 
 ### API Pharmacies
 This API is meant for pharmacies, which exposes a web service to doctors/hospitals that lets them change the therapy to specific patients, prescribing or modifying the drugs they're already assuming
+
+## Run the APIs
+just run 
+```
+docker-compose up --build
+```
+in the root folder. The API for 118 service will be sitting on port 3118 and the one for pharmacies on port 3000, as specified in the docker compose file
