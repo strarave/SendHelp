@@ -34,12 +34,10 @@ client.subscribe('set_therapy', async function ({ task, taskService }) {
     };
 
     processVariables = new Variables();
-    localVariables = new Variables();
 
 
     if (therapyId == null) {
         args['body'] = {
-            "id": therapyId,
             "oncologist": doctorId,
             "patient": patientId,
             "drug": therapyDrug,
@@ -47,11 +45,13 @@ client.subscribe('set_therapy', async function ({ task, taskService }) {
             "comment": therapyComment
         }
 
+        processVariables.set("actionDetails", `Therapy added: ${therapyDrug}, ${therapyDosage}. ${therapyComment}`);
+
         restClient.post('http://localhost:3000/therapies', args, function (data, response) {
             console.log(`Response received: ${data}`);
 
-            processVariables.set("set_therapy_response", data);
-            taskService.complete(task, processVariables, localVariables);
+            processVariables.set("actionResult", data);
+            taskService.complete(task, processVariables);
         })
     }
 
@@ -64,11 +64,13 @@ client.subscribe('set_therapy', async function ({ task, taskService }) {
             "comment": therapyComment
         }
 
+        processVariables.set("actionDetails", `Therapy ${therapyId} updated: ${therapyDrug}, ${therapyDosage}. ${therapyComment}`);
+
         restClient.post(`http://localhost:3000/therapies/${therapyId}`, args, function (data, response) {
             console.log(`Response received: ${data}`);
 
-            processVariables.set("set_therapy_response", data);
-            taskService.complete(task, processVariables, localVariables);
+            processVariables.set("actionResult", data);
+            taskService.complete(task, processVariables, new Variables());
         })
     }
 });

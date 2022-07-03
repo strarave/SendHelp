@@ -39,13 +39,12 @@ client.subscribe('call_118', async function ({ task, taskService }) {
   };
 
   processVariables = new Variables();
-  localVariables = new Variables();
 
   restClient.post('http://localhost:3000/ambulance-requests', args, function (data, response) {
     console.log(`Response received: ${data}`);
 
-    processVariables.set("call_118_response", data);
-    taskService.complete(task, processVariables, localVariables);
+    processVariables.set("actionResult", data);
+    taskService.complete(task, processVariables, new Variables());
   })
 });
 
