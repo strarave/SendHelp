@@ -1,5 +1,5 @@
 const express = require('express');
-const getAmbulances = require('../services/getAmbulances');
+const ambulances = require('../services/ambulances');
 
 const router = new express.Router();
 
@@ -10,7 +10,7 @@ const router = new express.Router();
 router.get('/:locationId', async (req, res, next) => {
   let params = req.params.locationId;
   try {
-    const result = await getAmbulances.getGetAmbulancesByLocationid(params);
+    const result = await ambulances.ambulancesByLocationid(params);
     res.json(result.data);
   } catch (err) {
     next(err);

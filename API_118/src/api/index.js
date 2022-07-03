@@ -14,9 +14,9 @@ app.use(cookieParser());
 /*
  * Routes
  */
-app.use('/getServiceStatus', require('./routes/getServiceStatus'));
-app.use('/getAmbulances', require('./routes/getAmbulances'));
-app.use('/callAmbulance', require('./routes/callAmbulance'));
+app.use('/serviceStatus', require('./routes/serviceStatus'));
+app.use('/ambulances', require('./routes/ambulances'));
+app.use('/ambulanceRequest', require('./routes/ambulanceRequest'));
 
 // catch 404
 app.use((req, res, next) => {

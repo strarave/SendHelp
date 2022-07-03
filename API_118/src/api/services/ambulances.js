@@ -1,5 +1,5 @@
 const ServerError = require('../../lib/error');
-module.exports.getGetAmbulancesByLocationid = async (locationId) => {
+module.exports.ambulancesByLocationid = async (locationId) => {
   let ambulancesNumber = 0;
   switch(locationId) {
     case 'Milano':
