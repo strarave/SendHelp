@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  api-118:
+    build: ./API_118
+    container_name: api-118
+    ports:
+      - "3118:3000"
+    restart: unless-stopped
+
+  api-pharmacy:
+    build: ./API_pharmacy
+    container_name: api-pharmacy
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
