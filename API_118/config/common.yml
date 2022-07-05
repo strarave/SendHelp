@@ -1,6 +1,6 @@
 defaults: &defaults
   api:
-    port: 3000
+    port: 3001
 
   logger:
     name: Emergency service API for Italy

@@ -1,5 +1,6 @@
 const patients = [
   "veronica",
+  "XYZ",
   "vanessa",
   "luisa",
   "roberta",
@@ -95,7 +96,7 @@ module.exports.addTherapy = async (body) => {
 
   return {
     status: 201,
-    data: `Therapy ${therapy.id} successfully created`
+    data: `Therapy successfully added`
   };
 };
 
@@ -135,6 +136,6 @@ module.exports.deleteTherapy = async (therapyId) => {
   therapies.splice(index, 1);
   return {
     status: 200,
-    data: `Therapy ${therapyId} successfully deleted`
+    data: `Therapy ${therapyId} successfully removed`
   };
 };
