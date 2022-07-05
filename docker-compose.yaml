@@ -20,3 +20,9 @@ services:
     container_name: camunda
     ports:
       - "8080:8080"
+
+  workers:
+    build: ./camunda_workers
+    container_name: camunda-workers
+    depends_on:
+      - camunda

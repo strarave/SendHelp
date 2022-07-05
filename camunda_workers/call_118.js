@@ -2,7 +2,7 @@ const { Client, logger, Variables } = require('camunda-external-task-client-js')
 const RESTClient = require('node-rest-client').Client;
 const open = require('open');
 
-const config = { baseUrl: 'http://localhost:8080/engine-rest', use: logger, asyncResponseTimeout: 10000 };
+const config = { baseUrl: 'http://camunda:8080/engine-rest', use: logger, asyncResponseTimeout: 10000 };
 const client = new Client(config);
 
 const restClient = new RESTClient();
@@ -43,7 +43,7 @@ client.subscribe('call_118', async function ({ task, taskService }) {
   processVariables = new Variables();
   processVariables.set("actionDetails", `Send ambulance to patient ${patientName} ${patientSurname}, address: ${patientAddress}`);
 
-  restClient.post('http://localhost:3001/ambulanceRequest', args, function (data, response) {
+  restClient.post('http://api-118:3001/ambulanceRequest', args, function (data, response) {
     console.log(`Response received: ${data}, ${response}`);
 
     processVariables.set("actionResult", data);
